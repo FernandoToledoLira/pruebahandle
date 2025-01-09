@@ -4,12 +4,14 @@ class MessageHandler {
   async handleIncomingMessage(message) {
     if (message?.type === 'text') {
       const incomingMessage = message.text.body.toLowerCase().trim();
+      // Extract and format the from number
+      const fromNumber = message.from.slice(0, 2) + message.from.slice(3);
 
       if(this.isGreeting(incomingMessage)){
-        await this.sendWelcomeMessage(message.from, message.id)
+        await this.sendWelcomeMessage(fromNumber, message.id)
       } else {
         const response = `Echo: ${message.text.body}`;
-        await whatsappService.sendMessage(message.from, response, message.id);
+        await whatsappService.sendMessage(fromNumber, response, message.id);
       }
       await whatsappService.markAsRead(message.id);
     }
